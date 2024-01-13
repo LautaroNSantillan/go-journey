@@ -5,9 +5,9 @@ import "fmt"
 func main() {
 
 	//var & consts
-	var bookingAppName = "The greatest Go booking app ever"
+	bookingAppName := "The greatest Go booking app ever"
 	const totalTickets = 50
-	var remainingTickets = 50
+	var remainingTickets uint = 50
 
 	fmt.Printf("bookingAppName is %T, totalTickets is %T, remainingTickets is %T\n", bookingAppName, totalTickets, remainingTickets)
 
