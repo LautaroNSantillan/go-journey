@@ -5,32 +5,35 @@ import (
 	"strings"
 )
 
+// CREATE A VARIABLE AS LOCAL CAS POSSIBLE
+// cant use syntactic sugar on package level vars
+// var & consts
+var bookingAppName = "The greatest Go booking app ever" //syntactic sugar
+const totalTickets = 50
+
+var remainingTickets uint = 50
+
+// array & slices
+var bookings = []string{} // no size = slice
+
 func main() {
-
-	//var & consts
-	bookingAppName := "The greatest Go booking app ever" //syntactic sugar
-	const totalTickets = 50
-	var remainingTickets uint = 50
-
-	//array & slices
-	bookings := []string{} // no size = slice
 
 	fmt.Printf("bookingAppName is %T, totalTickets is %T, remainingTickets is %T\n", bookingAppName, totalTickets, remainingTickets)
 
-	greetUser(bookingAppName, remainingTickets, totalTickets)
+	greetUser()
 
 	//for: only loop
 	for {
 
 		firstName, lastName, email, userTickets := getUserInput()
 
-		isValidName, isValidEmail, isValidAmount := validateUserInput(firstName, lastName, email, userTickets, remainingTickets)
+		isValidName, isValidEmail, isValidAmount := validateUserInput(firstName, lastName, email, userTickets)
 
 		if isValidAmount && isValidName && isValidEmail {
 
-			bookTicket(remainingTickets, userTickets, bookings, firstName, lastName, email, bookingAppName)
+			bookTicket(userTickets, firstName, lastName, email)
 
-			firstNames := printFirstNames(bookings)
+			firstNames := printFirstNames()
 			fmt.Printf("All bookings: %v\n", firstNames)
 
 			if remainingTickets == 0 {
@@ -54,14 +57,14 @@ func main() {
 	}
 }
 
-func greetUser(appName string, remainingTickets uint, totalTickets int) {
+func greetUser() {
 	//println & printf
-	fmt.Printf("Welcome to %v, enjoy your stay\n", appName)
+	fmt.Printf("Welcome to %v, enjoy your stay\n", bookingAppName)
 	fmt.Println("You are about to buy tickets")
 	fmt.Printf("Total tickets: %v, Available tickets: %v\n", remainingTickets, totalTickets)
 }
 
-func printFirstNames(bookings []string) []string {
+func printFirstNames() []string {
 	firstNamesSlice := []string{}
 	for _, element := range bookings { //range iterates // _ : blank identifier
 		var names = strings.Fields(element) //split by space
@@ -70,7 +73,7 @@ func printFirstNames(bookings []string) []string {
 	return firstNamesSlice
 }
 
-func validateUserInput(firstName string, lastName string, email string, userTickets uint, remainingTickets uint) (bool, bool, bool) {
+func validateUserInput(firstName string, lastName string, email string, userTickets uint) (bool, bool, bool) {
 	isValidName := len(firstName) >= 2 && len(lastName) >= 2
 	isValidEmail := strings.Contains(email, "@")
 	isValidAmount := userTickets > 0 && userTickets <= remainingTickets
@@ -100,7 +103,7 @@ func getUserInput() (string, string, string, uint) {
 	return firstName, lastName, email, userTickets
 }
 
-func bookTicket(remainingTickets uint, userTickets uint, bookings []string, firstName string, lastName string, email string, bookingAppName string) {
+func bookTicket(userTickets uint, firstName string, lastName string, email string) {
 	remainingTickets -= userTickets
 	bookings = append(bookings, firstName+" "+lastName)
 
