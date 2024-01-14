@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"yet-another-booking-app/helper"
 )
 
 // CREATE A VARIABLE AS LOCAL CAS POSSIBLE
@@ -27,7 +28,7 @@ func main() {
 
 		firstName, lastName, email, userTickets := getUserInput()
 
-		isValidName, isValidEmail, isValidAmount := validateUserInput(firstName, lastName, email, userTickets)
+		isValidName, isValidEmail, isValidAmount := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
 
 		if isValidAmount && isValidName && isValidEmail {
 
@@ -42,14 +43,14 @@ func main() {
 			}
 		} else {
 			if !isValidName {
-				fmt.Printf("Your name is too short")
+				fmt.Printf("Your name is too short.\n")
 			}
 			if !isValidEmail {
-				fmt.Printf("Your email is invalid")
+				fmt.Printf("Your email is invalid.\n")
 
 			}
 			if !isValidAmount {
-				fmt.Printf("Invalid ticket number")
+				fmt.Printf("Invalid ticket number.\n")
 
 			}
 			//continue //next iteration
@@ -71,14 +72,6 @@ func printFirstNames() []string {
 		firstNamesSlice = append(firstNamesSlice, names[0])
 	}
 	return firstNamesSlice
-}
-
-func validateUserInput(firstName string, lastName string, email string, userTickets uint) (bool, bool, bool) {
-	isValidName := len(firstName) >= 2 && len(lastName) >= 2
-	isValidEmail := strings.Contains(email, "@")
-	isValidAmount := userTickets > 0 && userTickets <= remainingTickets
-
-	return isValidName, isValidEmail, isValidAmount
 }
 
 func getUserInput() (string, string, string, uint) {
