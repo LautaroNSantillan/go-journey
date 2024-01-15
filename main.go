@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"strings"
+	"strconv"
 	"yet-another-booking-app/helper"
 )
 
@@ -15,7 +15,7 @@ const totalTickets = 50
 var remainingTickets uint = 50
 
 // array & slices
-var bookings = []string{} // no size = slice
+var bookings = make([]map[string]string, 0)
 
 func main() {
 
@@ -67,9 +67,8 @@ func greetUser() {
 
 func printFirstNames() []string {
 	firstNamesSlice := []string{}
-	for _, element := range bookings { //range iterates // _ : blank identifier
-		var names = strings.Fields(element) //split by space
-		firstNamesSlice = append(firstNamesSlice, names[0])
+	for _, element := range bookings { //range iterates // _ : blank identifier //split by space
+		firstNamesSlice = append(firstNamesSlice, element["firstName"])
 	}
 	return firstNamesSlice
 }
@@ -98,7 +97,15 @@ func getUserInput() (string, string, string, uint) {
 
 func bookTicket(userTickets uint, firstName string, lastName string, email string) {
 	remainingTickets -= userTickets
-	bookings = append(bookings, firstName+" "+lastName)
+
+	var userData = make(map[string]string)
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	userData["tickets"] = strconv.FormatUint(uint64(userTickets), 10)
+
+	bookings = append(bookings, userData)
+	fmt.Printf("Bookings: %v\n", bookings)
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive your order details at %v.\n", firstName, lastName, userTickets, email)
 	fmt.Printf("%v tickets remainig for %v.\n", remainingTickets, bookingAppName)
