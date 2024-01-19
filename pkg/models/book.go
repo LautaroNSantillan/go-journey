@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	"github.com/LautaroNSantillan/my-go-journey/tree/mysql-books/pkg/config"
 	"github.com/jinzhu/gorm"
 )
@@ -10,11 +12,11 @@ var db *gorm.DB
 type Book struct {
 	gorm.Model
 	Name        string `gorm:"" json:"name"`
-	Author      string `gorm:"author"`
-	Publication string `gorm:"publish_date"`
+	Author      string `json:"author"`
+	Publication string `json:"publication"`
 }
 
-func initDB() {
+func InitDB() {
 	config.ConnectToDB()
 	db = config.GetDB()
 	db.AutoMigrate(&Book{})
@@ -27,8 +29,16 @@ func (book *Book) CreateBook() *Book {
 }
 
 func GetAllBooks() []Book {
+	if db == nil {
+		fmt.Println("conected")
+		config.ConnectToDB() // Ensure the database is connected
+	}
+
 	var Books []Book
-	db.Find(&Books)
+	if db != nil {
+		db.Find(&Books)
+		fmt.Println("found book")
+	}
 	return Books
 }
 
