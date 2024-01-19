@@ -10,14 +10,6 @@ import (
 	"github.com/slack-io/slacker"
 )
 
-var (
-	api        *slack.Client
-	channelArr []string
-	fileArr    []string
-	appToken   string
-	botToken   string
-)
-
 func InitializeBot() *slacker.Slacker {
 	godotenv.Load()
 	appToken := os.Getenv("SLACK_APP_TOKEN")
@@ -26,14 +18,16 @@ func InitializeBot() *slacker.Slacker {
 	return slacker.NewClient(botToken, appToken)
 }
 
-func ApiChanFilesSetup() {
-	api = slack.New(botToken)
-	channelArr = []string{os.Getenv("SLACK_CHANNEL_ID")}
-	fileArr = []string{"./pkg/fileuploadbot/bono.jpg"}
+func ApiChanFilesSetup() (*slack.Client, []string, []string) {
+	api := slack.New(os.Getenv("SLACK_BOT_TOKEN"))
+	channelArr := []string{os.Getenv("SLACK_CHANNEL_ID")}
+	fileArr := []string{"../bono.jpg"}
+	return api, channelArr, fileArr
 }
 
 func UploadFiles() {
 	fmt.Println("Uploading files...")
+	api, channelArr, fileArr := ApiChanFilesSetup()
 	for i := 0; i < len(fileArr); i++ {
 		params := slack.FileUploadParameters{
 			Channels: channelArr,
@@ -56,8 +50,8 @@ func RegisterCommands(bot *slacker.Slacker) {
 	bot.AddCommand(&slacker.CommandDefinition{
 		Command: "Upload",
 		Handler: func(ctx *slacker.CommandContext) {
-			UploadFiles()
 			ctx.Response().Reply("🤖Here are your files!🤖")
+			UploadFiles()
 		},
 	})
 

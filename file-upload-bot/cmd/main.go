@@ -11,7 +11,6 @@ func main() {
 
 	bot := fileuploadbot.InitializeBot()
 
-	fileuploadbot.ApiChanFilesSetup()
 	fileuploadbot.RegisterCommands(bot)
 
 	ctx, cancel := context.WithCancel(context.Background())
