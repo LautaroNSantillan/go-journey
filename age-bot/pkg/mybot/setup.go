@@ -29,9 +29,9 @@ func RegisterCommands(bot *slacker.Slacker) {
 		Handler:     handlers.YearAge,
 	})
 
-	bot.Command("My date of birth is <DD>/<MM>/<YYYY> ", &slacker.CommandDefinition{
+	bot.Command("My date of birth is <dd> <mm> <yyyy> ", &slacker.CommandDefinition{
 		Description: "BEEP BOOP Actual age calculator, please enter your date of birth with the format dd/mm/yyyy BEEP BOOP",
-		Handler:     handlers.ProperAge,
+		Handler:     handlers.CalculateDifference,
 	})
 }
 
