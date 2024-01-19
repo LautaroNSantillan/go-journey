@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/LautaroNSantillan/my-go-journey/tree/slack-bot/pkg/mybot"
+	"github.com/LautaroNSantillan/my-go-journey/slack-bot/age-bot/pkg/mybot"
 )
 
 func main() {

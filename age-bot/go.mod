@@ -1,4 +1,4 @@
-module github.com/LautaroNSantillan/my-go-journey/tree/slack-bot
+module github.com/LautaroNSantillan/my-go-journey/slack-bot/age-bot
 
 go 1.21.5
 

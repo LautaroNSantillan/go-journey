@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/LautaroNSantillan/my-go-journey/tree/slack-bot/pkg/mybot/handlers"
+	"github.com/LautaroNSantillan/my-go-journey/slack-bot/age-bot/pkg/mybot/handlers"
 	"github.com/joho/godotenv"
 	"github.com/shomali11/slacker"
 )
