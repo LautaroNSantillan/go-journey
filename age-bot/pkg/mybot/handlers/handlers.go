@@ -45,11 +45,7 @@ func ProperAge(botCtx slacker.BotContext, req slacker.Request, res slacker.Respo
 		res.Reply("Error: Invalid date format. Please use the format dd mm yyyy.")
 	}
 
-	currentTime := time.Now()
-	ageDuration := currentTime.Sub(parsedDate)
-	years := int(ageDuration.Hours() / 24 / 365.25)
-	months := int(ageDuration.Hours() / 24 / 30.44)
-	days := int(ageDuration.Hours() / 24)
+	years, months, days := diffInYearsMonthsDays(parsedDate, time.Now())
 
 	res.Reply(fmt.Sprintf("Your age is %d years, %d months, and %d days", years, months, days))
 }
@@ -61,38 +57,6 @@ func strToInt(str string) int {
 	}
 	fmt.Println("strToInt: ", int)
 	return int
-}
-
-func CalculateDifference(botCtx slacker.BotContext, req slacker.Request, res slacker.ResponseWriter) {
-	day := req.Param("dd")
-	month := req.Param("mm")
-	year := req.Param("yyyy")
-
-	dateStr := fmt.Sprintf("%s/%s/%s", day, month, year)
-	fmt.Println("DATESTR : ", dateStr)
-	parsedDate, err := time.Parse("2/1/2006", dateStr)
-	fmt.Println("PARSED DATE ", parsedDate.String())
-	if err != nil {
-		res.Reply("Error: Invalid date format. Please use the format dd mm yyyy.")
-	}
-
-	// Parse the provided dates
-
-	if err != nil {
-		res.Reply("Error: Invalid start date format. Please use the format dd/mm/yyyy.")
-		return
-	}
-
-	if err != nil {
-		res.Reply("Error: Invalid end date format. Please use the format dd/mm/yyyy.")
-		return
-	}
-
-	// Calculate the difference
-	years, months, days := diffInYearsMonthsDays(parsedDate, time.Now())
-
-	// Output the result
-	res.Reply(fmt.Sprintf("Your age is %d years, %d months, and %d days", years, months, days))
 }
 
 func diffInYearsMonthsDays(start, end time.Time) (int, int, int) {
