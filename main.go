@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"text/template"
@@ -14,6 +15,7 @@ type Film struct {
 func main() {
 
 	http.HandleFunc("/", handler1)
+	http.HandleFunc("/add-film/", addFilm)
 
 	log.Fatal(http.ListenAndServe(":8000", nil))
 
@@ -30,4 +32,16 @@ func handler1(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 	templ.Execute(w, films)
+}
+
+func addFilm(w http.ResponseWriter, r *http.Request) {
+	title := r.PostFormValue("title")
+	director := r.PostFormValue("director")
+
+	htmlStr := fmt.Sprintf("<li class='list-group-item bg-primary text-white'>%s - %s</li>", title, director)
+
+	tmpl, _ := template.New("myTempl").Parse(htmlStr)
+
+	tmpl.Execute(w, nil)
+
 }
