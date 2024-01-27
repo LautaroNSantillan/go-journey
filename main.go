@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"text/template"
@@ -37,13 +36,12 @@ func handler1(w http.ResponseWriter, r *http.Request) {
 
 func addFilm(w http.ResponseWriter, r *http.Request) {
 	time.Sleep(1 * time.Second)
+
 	title := r.PostFormValue("title")
 	director := r.PostFormValue("director")
 
-	htmlStr := fmt.Sprintf("<li class='list-group-item bg-primary text-white'>%s - %s</li>", title, director)
+	tmpl := template.Must(template.ParseFiles("index.html"))
 
-	tmpl, _ := template.New("myTempl").Parse(htmlStr)
-
-	tmpl.Execute(w, nil)
+	tmpl.ExecuteTemplate(w, "film-list-element", Film{Title: title, Director: director})
 
 }
