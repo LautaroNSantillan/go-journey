@@ -2,4 +2,6 @@ module github.com/LautaroNSantillan/my-go-journey/tree/todo-v2
 
 go 1.21.5
 
-require github.com/go-chi/chi/v5 v5.0.11 // indirect
+require github.com/go-chi/chi/v5 v5.0.11
+
+require github.com/mattn/go-sqlite3 v1.14.20 // indirect

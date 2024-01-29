@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"text/template"
 
@@ -9,6 +10,18 @@ import (
 )
 
 func main() {
+	err := connDB()
+	if err != nil {
+		log.Panic(err)
+	}
+
+	defer closeConn()
+
+	err = setupDB()
+	if err != nil {
+		log.Panic(err)
+	}
+
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
