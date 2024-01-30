@@ -32,3 +32,21 @@ func fetchTasks() ([]Item, error) {
 	}
 	return items, nil
 }
+
+func fetchTask(id int) (Item, error) {
+	var item Item
+	err := DB.QueryRow("SELECT id, title, completed FROM tasks WHERE id = (?)", id).Scan(&item.ID, &item.Title, &item.Completed)
+	if err != nil {
+		return Item{}, err
+	}
+	return item, nil
+}
+
+func updateTask(id int, title string) (Item, error) {
+	var item Item
+	err := DB.QueryRow("UPDATE tasks SET title = (?) WHERE id = (?) RETURNING id, title, completed", title, id).Scan(&item.ID, &item.Title, &item.Completed)
+	if err != nil {
+		return Item{}, err
+	}
+	return item, nil
+}
