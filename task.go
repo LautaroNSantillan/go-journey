@@ -50,3 +50,13 @@ func updateTask(id int, title string) (Item, error) {
 	}
 	return item, nil
 }
+
+func fetchCount() (int, error) {
+	var count int
+
+	err := DB.QueryRow("SELECT count(*) FROM tasks;").Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
