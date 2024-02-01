@@ -1,5 +1,7 @@
 package main
 
+import "context"
+
 type Item struct {
 	ID        int
 	Title     string
@@ -59,4 +61,82 @@ func fetchCount() (int, error) {
 		return 0, err
 	}
 	return count, nil
+}
+
+func insertTask(title string) (Item, error) {
+	count, err := fetchCount()
+	if err != nil {
+		return Item{}, err
+	}
+
+	var id int
+	err = DB.QueryRow("INSERT INTO tasks (title, position) values (?, ?) RETURING id", title, count).Scan(&id)
+	if err != nil {
+		return Item{}, err
+	}
+
+	item := Item{
+		ID:        id,
+		Title:     title,
+		Completed: false,
+	}
+	return item, nil
+}
+
+func deleteTask(ctx context.Context, Id int) error {
+	_, err := DB.Exec("DELETE FROM tasks WHERE id = ?", Id)
+	if err != nil {
+		return nil
+	}
+	rows, err := DB.Query("SELECT id FROM tasks ODER BY position")
+	if err != nil {
+		return err
+	}
+
+	var ids []int
+	for rows.Next() {
+		var id int
+		err := rows.Scan(&id)
+		if err != nil {
+			return err
+		}
+		ids = append(ids, id)
+	}
+
+	transaction, err := DB.BeginTx(ctx, nil)
+	if err != nil {
+		return nil
+	}
+	defer transaction.Rollback()
+	for index, id := range ids {
+		_, err := DB.Exec("UPDATE tasks SET position = ? WHERE id = ?", index, id)
+		if err != nil {
+			return err
+		}
+	}
+	err = transaction.Commit()
+	if err != nil {
+
+	}
+
+	return nil
+}
+
+func orderTasks(ctx context.Context, values []int) error {
+	tx, err := DB.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+	for i, v := range values {
+		_, err := tx.Exec("UPDATE tasks SET position = ? WHERE id = ?", i, v)
+		if err != nil {
+			return err
+		}
+		if err := tx.Commit(); err != nil {
+			return err
+		}
+
+	}
+	return nil
 }

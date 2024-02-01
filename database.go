@@ -2,8 +2,8 @@ package main
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3" // Import the sqlite3 driver
 
+	_ "github.com/mattn/go-sqlite3" // Import the sqlite3 driver
 )
 
 var DB *sql.DB
